@@ -43,6 +43,7 @@ module.exports = {
 
         self.output = (csv) => {
             console.log('output!')
+            console.log(self.report)
         };
 
         self.report = {};
@@ -141,14 +142,16 @@ module.exports = {
 
           if(o.request.hostname || o.request.host && o.request.host.indexOf('loggly') === -1) {
 
-            let g = self.report[self.globalTestNameMap[o.global]];
+            self.report[self.globalTestNameMap[o.global]] = self.report[self.globalTestNameMap[o.global]] || {};
 
-            g = g || {};
 
-            let name = [o.service, o.segment].join('.');
+            let name = o.service;
+            if(o.segment) {
+              name = [o.service, o.segment].join('.');
+            }
 
-            g[name] = g[name] || 0;
-            g[name]++;
+            self.report[self.globalTestNameMap[o.global]][name] = self.report[self.globalTestNameMap[o.global]][name] || 0;
+            self.report[self.globalTestNameMap[o.global]][name]++;
 
             console.log(o.global, colorHashOutput(self.globalTestNameMap[o.global]) || 'no test', colorHashOutput(o.service) || 'not sure', o.segment && colorHashOutput(o.segment), channel || '');
 

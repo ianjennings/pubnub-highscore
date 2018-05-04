@@ -17,3 +17,9 @@ setInterval(() => {
     });
 
 }, 1000);
+
+setTimeout(() => {
+
+    highscore.output();
+
+}, 5000);
